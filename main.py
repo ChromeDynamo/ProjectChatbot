@@ -150,9 +150,6 @@ def chatbot():
         print("Chatbot cannot start without valid responses.")
         return
 
-    # List of available topics
-    available_topics = list(keyword_responses.keys())
-
     # Initialize session data
     user_questions = []
     keyword_tracker = Counter()
@@ -178,7 +175,7 @@ def chatbot():
     confirmation = input(f"{user_name}: ")
     if get_confirmation(confirmation) == "yes":
         print(f"{agent_name}: Here are the available topics:")
-        for topic in available_topics:
+        for topic in keyword_responses.keys():  # Dynamically fetch topics from the current data
             print(f"- {topic}")
     else:
         print(f"{agent_name}: No problem! Let me know if there's anything else you'd like to discuss.")
@@ -217,24 +214,27 @@ def chatbot():
             else:
                 print(f"{agent_name}: Alright, let's continue!")
 
-        # Detect keywords for configuration mode
-        elif re.search(r"\b(admin|administrator|admin mode|config|configuration mode)\b", user_input, re.IGNORECASE):
-            print(f"{agent_name}: Entering Configuration Mode requires authentication.")
-            if admin_login():
-                configuration_mode(keyword_responses, filename)
-            else:
-                print(f"{agent_name}: Authentication failed. Returning to chat mode.")
-
         # Detect keywords for topics
         elif re.search(r"\b(topics|topic|topic list|topics list)\b", user_input, re.IGNORECASE):
             print(f"{agent_name}: Would you like me to show the topic list again?")
             confirmation = input(f"{user_name}: ")
             if get_confirmation(confirmation) == "yes":
+                # Dynamically fetch the current list of topics
                 print(f"{agent_name}: Here are the available topics:")
-                for topic in available_topics:
+                for topic in keyword_responses.keys():
                     print(f"- {topic}")
             else:
                 print(f"{agent_name}: No problem! Let me know if there's anything else you'd like to discuss.")
+
+        # Detect keywords for configuration mode
+        elif re.search(r"\b(admin|administrator|admin mode|config|configuration mode)\b", user_input, re.IGNORECASE):
+            print(f"{agent_name}: Entering Configuration Mode requires authentication.")
+            if admin_login():
+                configuration_mode(keyword_responses, filename)
+                # Reload responses after configuration mode to reflect changes
+                keyword_responses = load_responses(filename)
+            else:
+                print(f"{agent_name}: Authentication failed. Returning to chat mode.")
 
         # Detect keywords from JSON
         else:
@@ -242,8 +242,7 @@ def chatbot():
             for keyword, responses in keyword_responses.items():
                 if re.search(rf"\b{keyword}\b", user_input, re.IGNORECASE):
                     keyword_tracker[keyword] += 1
-                    personality_responses = responses.get(agent_name, [])
-                    response_iter = iter(personality_responses)  # Create an iterator for the responses
+                    response_iter = iter(responses)  # Create an iterator for the responses
 
                     print(f"{agent_name}: {next(response_iter)}")  # Provide the first response
                     found_keyword = True
@@ -266,7 +265,6 @@ def chatbot():
             # Fallback response if no keyword is found
             if not found_keyword:
                 print(f"{agent_name}: {random.choice(fallback_responses[agent_name])}")
-
 
 # Run the chatbot
 if __name__ == "__main__":
