@@ -17,6 +17,23 @@ def load_responses(filename):
         return {}
 
 
+def get_confirmation(user_input):
+    """
+    Determines if the user's input is a 'yes' or 'no' response based on synonyms.
+    Returns 'yes', 'no', or None if neither is detected.
+    """
+    yes_synonyms = {"yes", "yea", "yeah", "sure", "okay", "ok", "yep", "alright"}
+    no_synonyms = {"no", "nah", "nope", "not really", "no thanks"}
+
+    # Normalize input and check against synonyms
+    normalized_input = user_input.strip().lower()
+    if any(word in normalized_input for word in yes_synonyms):
+        return "yes"
+    elif any(word in normalized_input for word in no_synonyms):
+        return "no"
+    return None
+
+
 def chatbot():
     # Load keyword responses from JSON file
     keyword_responses = load_responses("keywords.json")
@@ -49,8 +66,8 @@ def chatbot():
 
     # Ask if the user wants a list of available topics
     print(f"{agent_name}: Would you like a list of available topics?")
-    confirmation = input(f"{user_name}: ").strip().lower()
-    if confirmation in ["yes", "sure", "okay", "ok", "yeah"]:
+    confirmation = input(f"{user_name}: ")
+    if get_confirmation(confirmation) == "yes":
         print(f"{agent_name}: Here are the available topics:")
         for topic in available_topics:
             print(f"- {topic}")
@@ -76,14 +93,14 @@ def chatbot():
         # Detect "bye", "exit", "quit" in the sentence
         if re.search(r"\b(bye|exit|quit)\b", user_input, re.IGNORECASE):
             print(f"{agent_name}: It sounds like you want to end the chat. Is that correct?")
-            confirmation = input(f"{user_name}: ").strip().lower()
-            if confirmation in ["yes", "sure", "yeah", "ok", "okay"]:
+            confirmation = input(f"{user_name}: ")
+            if get_confirmation(confirmation) == "yes":
                 print(f"{agent_name}: Goodbye {user_name}! Have a great day!")
 
                 # Offer session summary
                 print(f"{agent_name}: Would you like a summary of our chat session?")
-                summary_confirmation = input(f"{user_name}: ").strip().lower()
-                if summary_confirmation in ["yes", "sure", "okay", "ok", "yeah"]:
+                summary_confirmation = input(f"{user_name}: ")
+                if get_confirmation(summary_confirmation) == "yes":
                     print(f"{agent_name}: Here's your session summary:")
                     print(f"- Total questions asked: {len(user_questions)}")
                     print(f"- Most frequent keywords: {', '.join([kw for kw, _ in keyword_tracker.most_common(3)])}")
@@ -94,8 +111,8 @@ def chatbot():
         # Detect "topics" and its synonyms
         elif re.search(r"\b(topics|topic|topic list|topics list)\b", user_input, re.IGNORECASE):
             print(f"{agent_name}: Would you like a list of available topics?")
-            confirmation = input(f"{user_name}: ").strip().lower()
-            if confirmation in ["yes", "sure", "okay", "ok", "yeah"]:
+            confirmation = input(f"{user_name}: ")
+            if get_confirmation(confirmation) == "yes":
                 print(f"{agent_name}: Here are the available topics:")
                 for topic in available_topics:
                     print(f"- {topic}")
@@ -109,8 +126,24 @@ def chatbot():
                 if re.search(rf"\b{keyword}\b", user_input, re.IGNORECASE):
                     keyword_tracker[keyword] += 1
                     personality_responses = responses.get(agent_name, [])
-                    print(f"{agent_name}: {random.choice(personality_responses)}")
+                    response_iter = iter(personality_responses)  # Create an iterator for the responses
+
+                    print(f"{agent_name}: {next(response_iter)}")  # Provide the first response
                     found_keyword = True
+
+                    # Ask if the user wants to know more
+                    while True:
+                        print(f"{agent_name}: Would you like to know more about {keyword}?")
+                        confirmation = input(f"{user_name}: ")
+                        if get_confirmation(confirmation) == "yes":
+                            try:
+                                print(f"{agent_name}: {next(response_iter)}")  # Provide the next response
+                            except StopIteration:
+                                print(f"{agent_name}: Sorry, I've run out of information about {keyword}.")
+                                break
+                        else:
+                            print(f"{agent_name}: No problem! Let me know if there's anything else you'd like to discuss.")
+                            break
                     break
 
             # Fallback response if no keyword is found

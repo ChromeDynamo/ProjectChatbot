@@ -3,7 +3,7 @@
         "Alex": [
             "The cafe is brewing coffee 24/7 for caffeine warriors!",
             "Pastries here are so good, they deserve a standing ovation!",
-            "Ever tried our mystery latte? It’s a surprise every time.",
+            "Ever tried our mystery latte? It is a surprise every time.",
             "Our cafe is where hunger meets its match.",
             "Skip the library—study at the cafe with a mocha!"
         ],
@@ -15,9 +15,9 @@
             "Our cafe is the heart of campus life."
         ],
         "Taylor": [
-            "The cafe’s coffee? Legendary, like me.",
-            "I’d write an ode to their croissants if I had a pen.",
-            "Need a break? The cafe’s got your back!",
+            "The cafe coffee? Legendary, like me.",
+            "I would write an ode to their croissants if I had a pen.",
+            "Need a break? The cafe has got your back!",
             "No better place to spill tea than the cafe!",
             "Trust me, their muffins are worth skipping class for."
         ],
@@ -30,7 +30,7 @@
         ],
         "Casey": [
             "The cafe is the MVP of this campus!",
-            "The pastries here? Chef’s kiss!",
+            "The pastries here? Chefs kiss!",
             "Fuel your day with our legendary espressos!",
             "Caffeine fixes everything, and the cafe knows it.",
             "The campus cafe: where magic happens."
@@ -55,7 +55,7 @@
             "The library’s Wi-Fi is faster than my wit.",
             "Shhh... it’s library time, not party time.",
             "Lost? The library has all the answers—or at least books.",
-            "The library’s open 24/7 because sleep is overrated.",
+            "The library is open 24/7 because sleep is overrated.",
             "Trust me, the library is a treasure chest of knowledge."
         ],
         "Morgan": [
@@ -75,21 +75,21 @@
     },
     "courses": {
         "Alex": [
-            "Want courses? We’ve got more flavors than ice cream.",
+            "Want courses? We got more flavors than ice cream.",
             "Our courses are as diverse as your music playlist.",
             "Pick a course and become the genius you were born to be!",
-            "Courses so good, you’ll want to sign up twice.",
+            "Courses so good, you will want to sign up twice.",
             "Warning: Our courses may cause excessive brain growth."
         ],
         "Jordan": [
             "Explore our courses to find your true calling.",
             "We offer courses in arts, sciences, and engineering.",
-            "Admissions are open—don’t miss the deadlines.",
+            "Admissions are open—dont miss the deadlines.",
             "Our courses prepare you for a brighter future.",
             "Join our course catalog and start your learning journey!"
         ],
         "Taylor": [
-            "Courses? We’ve got a buffet of knowledge!",
+            "Courses? We have got a buffet of knowledge!",
             "Need a challenge? Pick our toughest courses.",
             "Our courses are like puzzles—fun and rewarding.",
             "Enroll now, thank me later.",
@@ -113,16 +113,16 @@
     "location": {
         "Alex": [
             "Poppleton: where dreams come true (or close enough).",
-            "We’re a 10-minute walk from snacks... I mean the station.",
-            "Our location? Chef’s kiss. Come see for yourself!",
-            "Poppleton’s campus is basically a postcard IRL.",
+            "We are a 10-minute walk from snacks... I mean the station.",
+            "Our location? Chefs kiss. Come see for yourself!",
+            "Poppletons campus is basically a postcard IRL.",
             "Lost? Just follow the smell of success (and coffee)."
         ],
         "Jordan": [
             "The university is in the heart of Poppleton.",
             "Poppleton is a vibrant city full of opportunities.",
             "Our campus is close to everything you’ll ever need.",
-            "It’s easy to reach us from the main train station.",
+            "It is easy to reach us from the main train station.",
             "Poppleton: small town, big dreams."
         ],
         "Taylor": [
@@ -130,11 +130,11 @@
             "Our campus location? Convenient and beautiful.",
             "Poppleton has everything: life, culture, and coffee.",
             "Finding us is easy—staying away is hard.",
-            "Poppleton’s vibes? Unmatched."
+            "Poppletons vibes? Unmatched."
         ],
         "Morgan": [
             "The university is located near the main train station.",
-            "We’re proud to be in the heart of Poppleton.",
+            "We are proud to be in the heart of Poppleton.",
             "Poppleton is known for its student-friendly atmosphere.",
             "Our scenic campus is just a short walk from downtown.",
             "We’re perfectly located for both study and leisure."
@@ -144,7 +144,7 @@
             "Our campus is the crown jewel of Poppleton.",
             "The best place to learn and live? Right here.",
             "Poppleton: come for the university, stay for the vibes.",
-            "The train station’s close, but you won’t want to leave."
+            "The train station is close, but you wont want to leave."
         ]
     }
 }
