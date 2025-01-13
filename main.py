@@ -1,7 +1,7 @@
 import random
 import re
 import json
-from collections import Counter, defaultdict
+from collections import Counter
 
 
 def load_responses(filename):
@@ -110,7 +110,7 @@ def chatbot():
 
         # Detect "topics" and its synonyms
         elif re.search(r"\b(topics|topic|topic list|topics list)\b", user_input, re.IGNORECASE):
-            print(f"{agent_name}: Would you like a list of available topics?")
+            print(f"{agent_name}: Would you like me to show the topic list again?")
             confirmation = input(f"{user_name}: ")
             if get_confirmation(confirmation) == "yes":
                 print(f"{agent_name}: Here are the available topics:")
