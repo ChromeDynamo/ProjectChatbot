@@ -17,6 +17,16 @@ def load_responses(filename):
         return {}
 
 
+def save_responses(filename, data):
+    """Save keyword responses to a JSON file."""
+    try:
+        with open(filename, 'w') as file:
+            json.dump(data, file, indent=4)
+            print("Responses saved successfully!")
+    except Exception as e:
+        print(f"Error: Could not save responses. {e}")
+
+
 def get_confirmation(user_input):
     """
     Determines if the user's input is a 'yes' or 'no' response based on synonyms.
@@ -34,15 +44,114 @@ def get_confirmation(user_input):
     return None
 
 
+def admin_login():
+    """Handles admin login for configuration mode."""
+    username = input("Enter admin username: ").strip()
+    password = input("Enter admin password: ").strip()
+
+    if username == "admin" and password == "admin123":
+        print("Access granted. Welcome to Configuration Mode!")
+        return True
+    else:
+        print("Access denied. Incorrect username or password.")
+        return False
+
+
+def configuration_mode(keyword_responses, filename):
+    """
+    Configuration mode to view, add, edit, or delete topics and responses.
+    """
+    personalities = ["Alex", "Jordan", "Taylor", "Morgan", "Casey"]  # List of chatbot personalities
+
+    while True:
+        print("\nConfiguration Mode Options:")
+        print("1. View all topics and responses")
+        print("2. Add a new topic")
+        print("3. Add a new response to an existing topic")
+        print("4. Delete a topic")
+        print("5. Delete a specific response from a topic")
+        print("6. Exit Configuration Mode")
+        choice = input("Choose an option (1-6): ").strip()
+
+        if choice == "1":
+            print("\nTopics and Responses:")
+            for topic, responses in keyword_responses.items():
+                print(f"- {topic}:")
+                if isinstance(responses, dict):
+                    for personality, response_list in responses.items():
+                        print(f"  {personality}:")
+                        for response in response_list:
+                            print(f"    - {response}")
+                else:
+                    print(f"  Responses: {responses}")
+        elif choice == "2":
+            new_topic = input("Enter the new topic keyword: ").strip()
+            if new_topic in keyword_responses:
+                print(f"Topic '{new_topic}' already exists!")
+            else:
+                # Initialize the topic with personality-based response dictionaries
+                keyword_responses[new_topic] = {personality: [] for personality in personalities}
+                print(f"Topic '{new_topic}' added successfully!")
+        elif choice == "3":
+            existing_topic = input("Enter the topic to add a response to: ").strip()
+            if existing_topic in keyword_responses:
+                print(f"Available personalities: {', '.join(personalities)}")
+                personality = input("Enter the personality to add a response for: ").strip()
+                if personality in personalities:
+                    new_response = input(f"Enter the new response for '{existing_topic}' ({personality}): ").strip()
+                    keyword_responses[existing_topic][personality].append(new_response)
+                    print(f"Response added to topic '{existing_topic}' for {personality}!")
+                else:
+                    print(f"Invalid personality: {personality}")
+            else:
+                print(f"Topic '{existing_topic}' does not exist.")
+        elif choice == "4":
+            topic_to_delete = input("Enter the topic keyword to delete: ").strip()
+            if topic_to_delete in keyword_responses:
+                del keyword_responses[topic_to_delete]
+                print(f"Topic '{topic_to_delete}' deleted successfully!")
+            else:
+                print(f"Topic '{topic_to_delete}' does not exist.")
+        elif choice == "5":
+            topic_to_edit = input("Enter the topic to delete a response from: ").strip()
+            if topic_to_edit in keyword_responses:
+                print(f"Available personalities: {', '.join(personalities)}")
+                personality = input("Enter the personality to delete a response for: ").strip()
+                if personality in personalities:
+                    if personality in keyword_responses[topic_to_edit]:
+                        print(f"Responses for '{topic_to_edit}' ({personality}):")
+                        for i, response in enumerate(keyword_responses[topic_to_edit][personality], start=1):
+                            print(f"{i}. {response}")
+                        response_index = input("Enter the number of the response to delete: ").strip()
+                        if response_index.isdigit() and 1 <= int(response_index) <= len(keyword_responses[topic_to_edit][personality]):
+                            removed_response = keyword_responses[topic_to_edit][personality].pop(int(response_index) - 1)
+                            print(f"Response '{removed_response}' deleted from topic '{topic_to_edit}' ({personality})!")
+                        else:
+                            print("Invalid response number.")
+                    else:
+                        print(f"No responses found for personality '{personality}'.")
+                else:
+                    print(f"Invalid personality: {personality}")
+            else:
+                print(f"Topic '{topic_to_edit}' does not exist.")
+        elif choice == "6":
+            save_responses(filename, keyword_responses)
+            print("Exiting Configuration Mode...")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+
 def chatbot():
     # Load keyword responses from JSON file
-    keyword_responses = load_responses("keywords.json")
+    filename = "keywords.json"
+    keyword_responses = load_responses(filename)
     if not keyword_responses:
         print("Chatbot cannot start without valid responses.")
         return
 
     # List of available topics
-    available_topics = ["Cafe hours", "Library services", "Course details", "Campus location"]
+    available_topics = list(keyword_responses.keys())
 
     # Initialize session data
     user_questions = []
@@ -108,7 +217,15 @@ def chatbot():
             else:
                 print(f"{agent_name}: Alright, let's continue!")
 
-        # Detect "topics" and its synonyms
+        # Detect keywords for configuration mode
+        elif re.search(r"\b(admin|administrator|admin mode|config|configuration mode)\b", user_input, re.IGNORECASE):
+            print(f"{agent_name}: Entering Configuration Mode requires authentication.")
+            if admin_login():
+                configuration_mode(keyword_responses, filename)
+            else:
+                print(f"{agent_name}: Authentication failed. Returning to chat mode.")
+
+        # Detect keywords for topics
         elif re.search(r"\b(topics|topic|topic list|topics list)\b", user_input, re.IGNORECASE):
             print(f"{agent_name}: Would you like me to show the topic list again?")
             confirmation = input(f"{user_name}: ")
