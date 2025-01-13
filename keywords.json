@@ -1,22 +1,150 @@
 {
-    "cafe": [
-        "The campus cafe is open from 8 AM to 8 PM daily.",
-        "We serve freshly brewed coffee, pastries, and snacks at the cafe!",
-        "The cafe is located in the main building near the entrance."
-    ],
-    "library": [
-        "The library is open 24/7 for students with a valid ID.",
-        "You can borrow books, use computers, and reserve study rooms in the library.",
-        "Our library also has an extensive online catalog accessible via the university website."
-    ],
-    "courses": [
-        "You can explore our wide range of courses on our website.",
-        "Our courses include arts, sciences, engineering, and business programs.",
-        "Admissions for new courses open twice a year, in Spring and Fall."
-    ],
-    "location": [
-        "The university is located in the heart of Poppleton.",
-        "Poppleton is known for its vibrant student life and scenic campus.",
-        "We are just a 10-minute walk from the main train station."
-    ]
+    "cafe": {
+        "Alex": [
+            "The cafe is brewing coffee 24/7 for caffeine warriors!",
+            "Pastries here are so good, they deserve a standing ovation!",
+            "Ever tried our mystery latte? It’s a surprise every time.",
+            "Our cafe is where hunger meets its match.",
+            "Skip the library—study at the cafe with a mocha!"
+        ],
+        "Jordan": [
+            "The cafe serves love in every cup of coffee.",
+            "Hungry? The cafe is your safe haven.",
+            "Get cozy with a book and a cappuccino at the cafe.",
+            "The cafe hours are 8 AM to 8 PM—don’t miss it!",
+            "Our cafe is the heart of campus life."
+        ],
+        "Taylor": [
+            "The cafe’s coffee? Legendary, like me.",
+            "I’d write an ode to their croissants if I had a pen.",
+            "Need a break? The cafe’s got your back!",
+            "No better place to spill tea than the cafe!",
+            "Trust me, their muffins are worth skipping class for."
+        ],
+        "Morgan": [
+            "The cafe is open daily from 8 AM to 8 PM.",
+            "Enjoy a cup of freshly brewed coffee at the cafe.",
+            "Our cafe serves a variety of snacks and drinks.",
+            "Looking for a quiet spot? Try the cafe.",
+            "The cafe is located in the main building near the entrance."
+        ],
+        "Casey": [
+            "The cafe is the MVP of this campus!",
+            "The pastries here? Chef’s kiss!",
+            "Fuel your day with our legendary espressos!",
+            "Caffeine fixes everything, and the cafe knows it.",
+            "The campus cafe: where magic happens."
+        ]
+    },
+    "library": {
+        "Alex": [
+            "Library: where books meet geeks.",
+            "It’s 24/7—because sleep is for the weak!",
+            "Looking for wisdom? Or just free Wi-Fi?",
+            "Warning: library smells like knowledge.",
+            "Books + coffee = the ultimate vibe."
+        ],
+        "Jordan": [
+            "The library is your academic sanctuary.",
+            "Need a quiet place? The library has you covered.",
+            "The library is always open for curious minds.",
+            "Borrow a book, borrow some peace.",
+            "Study rooms are free, so don’t miss out!"
+        ],
+        "Taylor": [
+            "The library’s Wi-Fi is faster than my wit.",
+            "Shhh... it’s library time, not party time.",
+            "Lost? The library has all the answers—or at least books.",
+            "The library’s open 24/7 because sleep is overrated.",
+            "Trust me, the library is a treasure chest of knowledge."
+        ],
+        "Morgan": [
+            "The library is open 24/7 for students with valid IDs.",
+            "Access books, computers, and study rooms anytime.",
+            "Our library also offers online catalogs.",
+            "The library is in the academic block—visit anytime.",
+            "Group study sessions are welcome in the library!"
+        ],
+        "Casey": [
+            "The library: where magic (and panic) happens!",
+            "Get lost in books, not deadlines, at the library.",
+            "Study hard, caffeinate harder—in the library.",
+            "The library is the soul of the campus—visit it!",
+            "Reading is dreaming with open eyes—start at the library."
+        ]
+    },
+    "courses": {
+        "Alex": [
+            "Want courses? We’ve got more flavors than ice cream.",
+            "Our courses are as diverse as your music playlist.",
+            "Pick a course and become the genius you were born to be!",
+            "Courses so good, you’ll want to sign up twice.",
+            "Warning: Our courses may cause excessive brain growth."
+        ],
+        "Jordan": [
+            "Explore our courses to find your true calling.",
+            "We offer courses in arts, sciences, and engineering.",
+            "Admissions are open—don’t miss the deadlines.",
+            "Our courses prepare you for a brighter future.",
+            "Join our course catalog and start your learning journey!"
+        ],
+        "Taylor": [
+            "Courses? We’ve got a buffet of knowledge!",
+            "Need a challenge? Pick our toughest courses.",
+            "Our courses are like puzzles—fun and rewarding.",
+            "Enroll now, thank me later.",
+            "The courses here? Life-changing and brain-bending."
+        ],
+        "Morgan": [
+            "Our courses cover arts, science, and business programs.",
+            "Spring and Fall admissions are now open for all courses.",
+            "Detailed course information is available on our website.",
+            "Our faculty is world-class, and so are our courses.",
+            "Explore hands-on learning through our academic programs."
+        ],
+        "Casey": [
+            "Courses here? A rollercoaster of learning and fun!",
+            "Dive into our courses—you won’t regret it.",
+            "Sign up for courses and unlock your potential.",
+            "Our courses are the secret sauce to success.",
+            "Bored? Join our courses and spice up your life!"
+        ]
+    },
+    "location": {
+        "Alex": [
+            "Poppleton: where dreams come true (or close enough).",
+            "We’re a 10-minute walk from snacks... I mean the station.",
+            "Our location? Chef’s kiss. Come see for yourself!",
+            "Poppleton’s campus is basically a postcard IRL.",
+            "Lost? Just follow the smell of success (and coffee)."
+        ],
+        "Jordan": [
+            "The university is in the heart of Poppleton.",
+            "Poppleton is a vibrant city full of opportunities.",
+            "Our campus is close to everything you’ll ever need.",
+            "It’s easy to reach us from the main train station.",
+            "Poppleton: small town, big dreams."
+        ],
+        "Taylor": [
+            "Poppleton is as close to perfection as it gets.",
+            "Our campus location? Convenient and beautiful.",
+            "Poppleton has everything: life, culture, and coffee.",
+            "Finding us is easy—staying away is hard.",
+            "Poppleton’s vibes? Unmatched."
+        ],
+        "Morgan": [
+            "The university is located near the main train station.",
+            "We’re proud to be in the heart of Poppleton.",
+            "Poppleton is known for its student-friendly atmosphere.",
+            "Our scenic campus is just a short walk from downtown.",
+            "We’re perfectly located for both study and leisure."
+        ],
+        "Casey": [
+            "Poppleton? More like Popple-fun!",
+            "Our campus is the crown jewel of Poppleton.",
+            "The best place to learn and live? Right here.",
+            "Poppleton: come for the university, stay for the vibes.",
+            "The train station’s close, but you won’t want to leave."
+        ]
+    }
 }
