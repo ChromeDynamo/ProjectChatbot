@@ -1,278 +1,218 @@
+import tkinter as tk
+from tkinter import ttk, scrolledtext, messagebox
 import random
 import re
 import json
 from collections import Counter
 
 
-def load_responses(filename):
-    """Load keyword responses from a JSON file."""
-    try:
-        with open(filename, 'r') as file:
-            return json.load(file)
-    except FileNotFoundError:
-        print("Error: The responses file was not found.")
-        return {}
-    except json.JSONDecodeError:
-        print("Error: The responses file contains invalid JSON.")
-        return {}
+class ChatbotGUI(tk.Tk):
+    def __init__(self):
+        super().__init__()
 
+        # Initialize chatbot data
+        self.filename = "keywords.json"
+        self.keyword_responses = self.load_responses()
+        self.user_questions = []
+        self.keyword_tracker = Counter()
+        self.personalities = {
+            "Alex": "quirky and loves puns",
+            "Jordan": "friendly and empathetic",
+            "Taylor": "witty with a touch of sarcasm",
+            "Morgan": "calm and professional",
+            "Casey": "playful and loves jokes"
+        }
+        self.agent_name = random.choice(list(self.personalities.keys()))
 
-def save_responses(filename, data):
-    """Save keyword responses to a JSON file."""
-    try:
-        with open(filename, 'w') as file:
-            json.dump(data, file, indent=4)
-            print("Responses saved successfully!")
-    except Exception as e:
-        print(f"Error: Could not save responses. {e}")
+        # Window setup
+        self.title("University of Poppleton Chatbot")
+        self.geometry("800x600")
 
+        # Create main container
+        self.create_widgets()
 
-def get_confirmation(user_input):
-    """
-    Determines if the user's input is a 'yes' or 'no' response based on synonyms.
-    Returns 'yes', 'no', or None if neither is detected.
-    """
-    yes_synonyms = {"yes", "yea", "yeah", "sure", "okay", "ok", "yep", "alright"}
-    no_synonyms = {"no", "nah", "nope", "not really", "no thanks"}
+        # Start chat
+        self.start_chat()
 
-    # Normalize input and check against synonyms
-    normalized_input = user_input.strip().lower()
-    if any(word in normalized_input for word in yes_synonyms):
-        return "yes"
-    elif any(word in normalized_input for word in no_synonyms):
-        return "no"
-    return None
+    def create_widgets(self):
+        # Main container
+        main_container = ttk.Frame(self)
+        main_container.pack(expand=True, fill="both", padx=10, pady=10)
 
+        # Chat display area
+        self.chat_display = scrolledtext.ScrolledText(main_container, wrap=tk.WORD, height=20)
+        self.chat_display.pack(expand=True, fill="both", pady=(0, 10))
 
-def admin_login():
-    """Handles admin login for configuration mode."""
-    username = input("Enter admin username: ").strip()
-    password = input("Enter admin password: ").strip()
+        # Input area
+        input_frame = ttk.Frame(main_container)
+        input_frame.pack(fill="x")
 
-    if username == "admin" and password == "admin123":
-        print("Access granted. Welcome to Configuration Mode!")
-        return True
-    else:
-        print("Access denied. Incorrect username or password.")
-        return False
+        self.user_input = ttk.Entry(input_frame)
+        self.user_input.pack(side="left", expand=True, fill="x", padx=(0, 5))
 
+        send_button = ttk.Button(input_frame, text="Send", command=self.process_input)
+        send_button.pack(side="right")
 
-def configuration_mode(keyword_responses, filename):
-    """
-    Configuration mode to view, add, edit, or delete topics and responses.
-    """
-    personalities = ["Alex", "Jordan", "Taylor", "Morgan", "Casey"]  # List of chatbot personalities
+        # Bind Enter key to send message
+        self.user_input.bind("<Return>", lambda e: self.process_input())
 
-    while True:
-        print("\nConfiguration Mode Options:")
-        print("1. View all topics and responses")
-        print("2. Add a new topic")
-        print("3. Add a new response to an existing topic")
-        print("4. Delete a topic")
-        print("5. Delete a specific response from a topic")
-        print("6. Exit Configuration Mode")
-        choice = input("Choose an option (1-6): ").strip()
+        # Admin button
+        admin_button = ttk.Button(main_container, text="Admin Mode", command=self.show_admin_login)
+        admin_button.pack(pady=(10, 0))
 
-        if choice == "1":
-            print("\nTopics and Responses:")
-            for topic, responses in keyword_responses.items():
-                print(f"- {topic}:")
-                if isinstance(responses, dict):
-                    for personality, response_list in responses.items():
-                        print(f"  {personality}:")
-                        for response in response_list:
-                            print(f"    - {response}")
-                else:
-                    print(f"  Responses: {responses}")
-        elif choice == "2":
-            new_topic = input("Enter the new topic keyword: ").strip()
-            if new_topic in keyword_responses:
-                print(f"Topic '{new_topic}' already exists!")
-            else:
-                # Initialize the topic with personality-based response dictionaries
-                keyword_responses[new_topic] = {personality: [] for personality in personalities}
-                print(f"Topic '{new_topic}' added successfully!")
-        elif choice == "3":
-            existing_topic = input("Enter the topic to add a response to: ").strip()
-            if existing_topic in keyword_responses:
-                print(f"Available personalities: {', '.join(personalities)}")
-                personality = input("Enter the personality to add a response for: ").strip()
-                if personality in personalities:
-                    new_response = input(f"Enter the new response for '{existing_topic}' ({personality}): ").strip()
-                    keyword_responses[existing_topic][personality].append(new_response)
-                    print(f"Response added to topic '{existing_topic}' for {personality}!")
-                else:
-                    print(f"Invalid personality: {personality}")
-            else:
-                print(f"Topic '{existing_topic}' does not exist.")
-        elif choice == "4":
-            topic_to_delete = input("Enter the topic keyword to delete: ").strip()
-            if topic_to_delete in keyword_responses:
-                del keyword_responses[topic_to_delete]
-                print(f"Topic '{topic_to_delete}' deleted successfully!")
-            else:
-                print(f"Topic '{topic_to_delete}' does not exist.")
-        elif choice == "5":
-            topic_to_edit = input("Enter the topic to delete a response from: ").strip()
-            if topic_to_edit in keyword_responses:
-                print(f"Available personalities: {', '.join(personalities)}")
-                personality = input("Enter the personality to delete a response for: ").strip()
-                if personality in personalities:
-                    if personality in keyword_responses[topic_to_edit]:
-                        print(f"Responses for '{topic_to_edit}' ({personality}):")
-                        for i, response in enumerate(keyword_responses[topic_to_edit][personality], start=1):
-                            print(f"{i}. {response}")
-                        response_index = input("Enter the number of the response to delete: ").strip()
-                        if response_index.isdigit() and 1 <= int(response_index) <= len(keyword_responses[topic_to_edit][personality]):
-                            removed_response = keyword_responses[topic_to_edit][personality].pop(int(response_index) - 1)
-                            print(f"Response '{removed_response}' deleted from topic '{topic_to_edit}' ({personality})!")
-                        else:
-                            print("Invalid response number.")
-                    else:
-                        print(f"No responses found for personality '{personality}'.")
-                else:
-                    print(f"Invalid personality: {personality}")
-            else:
-                print(f"Topic '{topic_to_edit}' does not exist.")
-        elif choice == "6":
-            save_responses(filename, keyword_responses)
-            print("Exiting Configuration Mode...")
-            break
-        else:
-            print("Invalid choice. Please try again.")
+    def display_message(self, sender, message):
+        self.chat_display.insert(tk.END, f"{sender}: {message}\n")
+        self.chat_display.see(tk.END)
 
+    def process_input(self):
+        user_input = self.user_input.get().strip()
+        if not user_input:
+            return
 
-def chatbot():
-    # Load keyword responses from JSON file
-    filename = "keywords.json"
-    keyword_responses = load_responses(filename)
-    if not keyword_responses:
-        print("Chatbot cannot start without valid responses.")
-        return
-
-    # Initialize session data
-    user_questions = []
-    keyword_tracker = Counter()
-
-    # Greet the user
-    user_name = input("Welcome to the University of Poppleton chat! What's your name? ")
-    print(f"Hello {user_name}, it's great to meet you!")
-
-    # Assign a random agent name and personality
-    personalities = {
-        "Alex": "quirky and loves puns",
-        "Jordan": "friendly and empathetic",
-        "Taylor": "witty with a touch of sarcasm",
-        "Morgan": "calm and professional",
-        "Casey": "playful and loves jokes"
-    }
-    agent_names = list(personalities.keys())
-    agent_name = random.choice(agent_names)
-    print(f"My name is {agent_name}, and I’m {personalities[agent_name]}. Type 'bye' to exit the chat.")
-
-    # Ask if the user wants a list of available topics
-    print(f"{agent_name}: Would you like a list of available topics?")
-    confirmation = input(f"{user_name}: ")
-    if get_confirmation(confirmation) == "yes":
-        print(f"{agent_name}: Here are the available topics:")
-        for topic in keyword_responses.keys():  # Dynamically fetch topics from the current data
-            print(f"- {topic}")
-    else:
-        print(f"{agent_name}: No problem! Let me know if there's anything else you'd like to discuss.")
-
-    # Fallback responses
-    fallback_responses = {
-        "Alex": ["I'm not sure, but let's wing it!", "Oops, my brain froze! Ask me that again?", "Oh, this is tricky. Let me think!"],
-        "Jordan": ["I'm not sure, but I'm here to help.", "That’s an interesting question! Let's figure it out.", "Hmm, let me dig deeper on that!"],
-        "Taylor": ["You stumped me there, but I'll give it a go!", "Wow, tricky one. Let’s see...", "Can't guarantee brilliance, but I'll try!"],
-        "Morgan": ["I'm not certain about that, but let's find a solution.", "Let me gather my thoughts on that.", "I'm here to assist. Let's refine your question."],
-        "Casey": ["Whoa! That's above my pay grade, but I'll try!", "Hold up, let me boot my brain!", "Interesting! Let’s unpack that."]
-    }
-
-    # Chat loop
-    while True:
-        user_input = input(f"{user_name}: ")
+        self.user_input.delete(0, tk.END)
+        self.display_message("You", user_input)
 
         # Track user input
-        user_questions.append(user_input)
+        self.user_questions.append(user_input)
 
-        # Detect "bye", "exit", "quit" in the sentence
+        # Process the input
         if re.search(r"\b(bye|exit|quit)\b", user_input, re.IGNORECASE):
-            print(f"{agent_name}: It sounds like you want to end the chat. Is that correct?")
-            confirmation = input(f"{user_name}: ")
-            if get_confirmation(confirmation) == "yes":
-                print(f"{agent_name}: Goodbye {user_name}! Have a great day!")
-
-                # Offer session summary
-                print(f"{agent_name}: Would you like a summary of our chat session?")
-                summary_confirmation = input(f"{user_name}: ")
-                if get_confirmation(summary_confirmation) == "yes":
-                    print(f"{agent_name}: Here's your session summary:")
-                    print(f"- Total questions asked: {len(user_questions)}")
-                    print(f"- Most frequent keywords: {', '.join([kw for kw, _ in keyword_tracker.most_common(3)])}")
-                break
-            else:
-                print(f"{agent_name}: Alright, let's continue!")
-
-        # Detect keywords for topics
+            self.handle_exit()
         elif re.search(r"\b(topics|topic|topic list|topics list)\b", user_input, re.IGNORECASE):
-            print(f"{agent_name}: Would you like me to show the topic list again?")
-            confirmation = input(f"{user_name}: ")
-            if get_confirmation(confirmation) == "yes":
-                # Dynamically fetch the current list of topics
-                print(f"{agent_name}: Here are the available topics:")
-                for topic in keyword_responses.keys():
-                    print(f"- {topic}")
-            else:
-                print(f"{agent_name}: No problem! Let me know if there's anything else you'd like to discuss.")
-
-        # Detect keywords for configuration mode
-        elif re.search(r"\b(admin|administrator|admin mode|config|configuration mode)\b", user_input, re.IGNORECASE):
-            print(f"{agent_name}: Entering Configuration Mode requires authentication.")
-            if admin_login():
-                configuration_mode(keyword_responses, filename)
-                # Reload responses after configuration mode to reflect changes
-                keyword_responses = load_responses(filename)
-            else:
-                print(f"{agent_name}: Authentication failed. Returning to chat mode.")
-
-        # Detect keywords from JSON
+            self.show_topics()
         else:
-            found_keyword = False
-            for keyword, responses in keyword_responses.items():
-                if re.search(rf"\b{keyword}\b", user_input, re.IGNORECASE):
-                    keyword_tracker[keyword] += 1
+            self.process_keywords(user_input)
 
-                    # Fetch the responses for the chatbot's assigned personality
-                    if agent_name in responses:
-                        available_responses = iter(responses[agent_name])  # Create an iterator for the responses
-                        print(f"{agent_name}: {next(available_responses)}")  # Provide the first response
+    def process_keywords(self, user_input):
+        found_keyword = False
+        for keyword, responses in self.keyword_responses.items():
+            if re.search(rf"\b{keyword}\b", user_input, re.IGNORECASE):
+                self.keyword_tracker[keyword] += 1
+                if isinstance(responses, dict) and self.agent_name in responses:
+                    response = random.choice(responses[self.agent_name])
+                    self.display_message(self.agent_name, response)
+                found_keyword = True
+                break
 
-                        # Ask if the user wants to know more
-                        while True:
-                            print(f"{agent_name}: Would you like to know more about {keyword}?")
-                            confirmation = input(f"{user_name}: ")
-                            if get_confirmation(confirmation) == "yes":
-                                try:
-                                    print(f"{agent_name}: {next(available_responses)}")  # Provide the next response
-                                except StopIteration:
-                                    print(f"{agent_name}: Sorry, I've run out of information about {keyword}.")
-                                    break
-                            else:
-                                print(
-                                    f"{agent_name}: No problem! Let me know if there's anything else you'd like to discuss.")
-                                break
-                    else:
-                        print(f"{agent_name}: Sorry, I don't have responses for this topic.")
+        if not found_keyword:
+            fallback_responses = {
+                "Alex": ["I'm not sure, but let's wing it!", "Oops, my brain froze! Ask me that again?"],
+                "Jordan": ["I'm not sure, but I'm here to help.",
+                           "That's an interesting question! Let's figure it out."],
+                "Taylor": ["You stumped me there, but I'll give it a go!", "Wow, tricky one. Let's see..."],
+                "Morgan": ["I'm not certain about that, but let's find a solution.",
+                           "Let me gather my thoughts on that."],
+                "Casey": ["Whoa! That's above my pay grade, but I'll try!", "Hold up, let me boot my brain!"]
+            }
+            self.display_message(self.agent_name, random.choice(fallback_responses[self.agent_name]))
 
-                    found_keyword = True
-                    break
+    def show_admin_login(self):
+        login_window = tk.Toplevel(self)
+        login_window.title("Admin Login")
+        login_window.geometry("300x150")
 
-            # Fallback response if no keyword is found
-            if not found_keyword:
-                print(f"{agent_name}: {random.choice(fallback_responses[agent_name])}")
+        ttk.Label(login_window, text="Username:").pack(pady=5)
+        username_entry = ttk.Entry(login_window)
+        username_entry.pack(pady=5)
+
+        ttk.Label(login_window, text="Password:").pack(pady=5)
+        password_entry = ttk.Entry(login_window, show="*")
+        password_entry.pack(pady=5)
+
+        def try_login():
+            if username_entry.get() == "admin" and password_entry.get() == "admin123":
+                login_window.destroy()
+                self.show_config_mode()
+            else:
+                messagebox.showerror("Error", "Invalid credentials")
+
+        ttk.Button(login_window, text="Login", command=try_login).pack(pady=10)
+
+    def show_config_mode(self):
+        config_window = tk.Toplevel(self)
+        config_window.title("Configuration Mode")
+        config_window.geometry("600x400")
+
+        # Create notebook for different operations
+        notebook = ttk.Notebook(config_window)
+        notebook.pack(expand=True, fill="both", padx=10, pady=10)
+
+        # View topics tab
+        view_frame = ttk.Frame(notebook)
+        notebook.add(view_frame, text="View Topics")
+
+        topics_display = scrolledtext.ScrolledText(view_frame)
+        topics_display.pack(expand=True, fill="both", padx=5, pady=5)
+
+        for topic, responses in self.keyword_responses.items():
+            topics_display.insert(tk.END, f"Topic: {topic}\n")
+            if isinstance(responses, dict):
+                for personality, response_list in responses.items():
+                    topics_display.insert(tk.END, f"  {personality}:\n")
+                    for response in response_list:
+                        topics_display.insert(tk.END, f"    - {response}\n")
+            topics_display.insert(tk.END, "\n")
+
+        # Add topic tab
+        add_frame = ttk.Frame(notebook)
+        notebook.add(add_frame, text="Add Topic")
+
+        ttk.Label(add_frame, text="Topic name:").pack(pady=5)
+        topic_entry = ttk.Entry(add_frame)
+        topic_entry.pack(pady=5)
+
+        def add_topic():
+            topic = topic_entry.get().strip()
+            if topic:
+                if topic not in self.keyword_responses:
+                    self.keyword_responses[topic] = {personality: [] for personality in self.personalities}
+                    self.save_responses()
+                    messagebox.showinfo("Success", f"Topic '{topic}' added successfully!")
+                    topic_entry.delete(0, tk.END)
+                else:
+                    messagebox.showerror("Error", f"Topic '{topic}' already exists!")
+
+        ttk.Button(add_frame, text="Add Topic", command=add_topic).pack(pady=10)
+
+    def start_chat(self):
+        welcome_msg = "Welcome to the University of Poppleton chat!"
+        self.display_message("System", welcome_msg)
+
+        intro_msg = f"I'm {self.agent_name}, and I'm {self.personalities[self.agent_name]}."
+        self.display_message(self.agent_name, intro_msg)
+
+        topics_msg = "Would you like to see the available topics? (yes/no)"
+        self.display_message(self.agent_name, topics_msg)
+
+    def show_topics(self):
+        topics_list = "\n".join([f"- {topic}" for topic in self.keyword_responses.keys()])
+        self.display_message(self.agent_name, f"Here are the available topics:\n{topics_list}")
+
+    def handle_exit(self):
+        if messagebox.askyesno("Exit", "Would you like to end the chat?"):
+            if messagebox.askyesno("Summary", "Would you like to see a chat summary?"):
+                summary = f"""Chat Summary:
+- Total questions asked: {len(self.user_questions)}
+- Most frequent keywords: {', '.join([kw for kw, _ in self.keyword_tracker.most_common(3)])}"""
+                self.display_message("System", summary)
+            self.after(2000, self.destroy)
+
+    def load_responses(self):
+        try:
+            with open(self.filename, 'r') as file:
+                return json.load(file)
+        except (FileNotFoundError, json.JSONDecodeError):
+            messagebox.showerror("Error", "Could not load responses file.")
+            return {}
+
+    def save_responses(self):
+        try:
+            with open(self.filename, 'w') as file:
+                json.dump(self.keyword_responses, file, indent=4)
+        except Exception as e:
+            messagebox.showerror("Error", f"Could not save responses: {e}")
 
 
-# Run the chatbot
 if __name__ == "__main__":
-    chatbot()
+    app = ChatbotGUI()
+    app.mainloop()
