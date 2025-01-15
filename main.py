@@ -242,29 +242,36 @@ def chatbot():
             for keyword, responses in keyword_responses.items():
                 if re.search(rf"\b{keyword}\b", user_input, re.IGNORECASE):
                     keyword_tracker[keyword] += 1
-                    response_iter = iter(responses)  # Create an iterator for the responses
 
-                    print(f"{agent_name}: {next(response_iter)}")  # Provide the first response
-                    found_keyword = True
+                    # Fetch the responses for the chatbot's assigned personality
+                    if agent_name in responses:
+                        available_responses = iter(responses[agent_name])  # Create an iterator for the responses
+                        print(f"{agent_name}: {next(available_responses)}")  # Provide the first response
 
-                    # Ask if the user wants to know more
-                    while True:
-                        print(f"{agent_name}: Would you like to know more about {keyword}?")
-                        confirmation = input(f"{user_name}: ")
-                        if get_confirmation(confirmation) == "yes":
-                            try:
-                                print(f"{agent_name}: {next(response_iter)}")  # Provide the next response
-                            except StopIteration:
-                                print(f"{agent_name}: Sorry, I've run out of information about {keyword}.")
+                        # Ask if the user wants to know more
+                        while True:
+                            print(f"{agent_name}: Would you like to know more about {keyword}?")
+                            confirmation = input(f"{user_name}: ")
+                            if get_confirmation(confirmation) == "yes":
+                                try:
+                                    print(f"{agent_name}: {next(available_responses)}")  # Provide the next response
+                                except StopIteration:
+                                    print(f"{agent_name}: Sorry, I've run out of information about {keyword}.")
+                                    break
+                            else:
+                                print(
+                                    f"{agent_name}: No problem! Let me know if there's anything else you'd like to discuss.")
                                 break
-                        else:
-                            print(f"{agent_name}: No problem! Let me know if there's anything else you'd like to discuss.")
-                            break
+                    else:
+                        print(f"{agent_name}: Sorry, I don't have responses for this topic.")
+
+                    found_keyword = True
                     break
 
             # Fallback response if no keyword is found
             if not found_keyword:
                 print(f"{agent_name}: {random.choice(fallback_responses[agent_name])}")
+
 
 # Run the chatbot
 if __name__ == "__main__":

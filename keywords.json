@@ -5,13 +5,13 @@
             "Pastries here are so good, they deserve a standing ovation!",
             "Ever tried our mystery latte? It is a surprise every time.",
             "Our cafe is where hunger meets its match.",
-            "Skip the library\u00e2\u20ac\u201dstudy at the cafe with a mocha!"
+            "Skip the library, study at the cafe with a mocha!"
         ],
         "Jordan": [
             "The cafe serves love in every cup of coffee.",
             "Hungry? The cafe is your safe haven.",
             "Get cozy with a book and a cappuccino at the cafe.",
-            "The cafe hours are 8 AM to 8 PM\u00e2\u20ac\u201ddon\u00e2\u20ac\u2122t miss it!",
+            "The cafe hours are 8 AM to 8 PM, dont miss it!",
             "Our cafe is the heart of campus life."
         ],
         "Taylor": [
@@ -39,7 +39,7 @@
     "library": {
         "Alex": [
             "Library: where books meet geeks.",
-            "It\u00e2\u20ac\u2122s 24/7\u00e2\u20ac\u201dbecause sleep is for the weak!",
+            "Its 24/7, because sleep is for the weak!",
             "Looking for wisdom? Or just free Wi-Fi?",
             "Warning: library smells like knowledge.",
             "Books + coffee = the ultimate vibe."
@@ -49,12 +49,12 @@
             "Need a quiet place? The library has you covered.",
             "The library is always open for curious minds.",
             "Borrow a book, borrow some peace.",
-            "Study rooms are free, so don\u00e2\u20ac\u2122t miss out!"
+            "Study rooms are free, so dont miss out!"
         ],
         "Taylor": [
-            "The library\u00e2\u20ac\u2122s Wi-Fi is faster than my wit.",
-            "Shhh... it\u00e2\u20ac\u2122s library time, not party time.",
-            "Lost? The library has all the answers\u00e2\u20ac\u201dor at least books.",
+            "The librarys Wi-Fi is faster than my wit.",
+            "Shhh... its library time, not party time.",
+            "Lost? The library has all the answers, or at least books.",
             "The library is open 24/7 because sleep is overrated.",
             "Trust me, the library is a treasure chest of knowledge."
         ],
@@ -62,15 +62,15 @@
             "The library is open 24/7 for students with valid IDs.",
             "Access books, computers, and study rooms anytime.",
             "Our library also offers online catalogs.",
-            "The library is in the academic block\u00e2\u20ac\u201dvisit anytime.",
+            "The library is in the academic block, visit anytime.",
             "Group study sessions are welcome in the library!"
         ],
         "Casey": [
             "The library: where magic (and panic) happens!",
             "Get lost in books, not deadlines, at the library.",
-            "Study hard, caffeinate harder\u00e2\u20ac\u201din the library.",
-            "The library is the soul of the campus\u00e2\u20ac\u201dvisit it!",
-            "Reading is dreaming with open eyes\u00e2\u20ac\u201dstart at the library."
+            "Study hard, caffeinate harder, in the library.",
+            "The library is the soul of the campus, visit it!",
+            "Reading is dreaming with open eyes, start at the library."
         ]
     },
     "courses": {
@@ -84,14 +84,14 @@
         "Jordan": [
             "Explore our courses to find your true calling.",
             "We offer courses in arts, sciences, and engineering.",
-            "Admissions are open\u00e2\u20ac\u201ddont miss the deadlines.",
+            "Admissions are open, dont miss the deadlines.",
             "Our courses prepare you for a brighter future.",
             "Join our course catalog and start your learning journey!"
         ],
         "Taylor": [
             "Courses? We have got a buffet of knowledge!",
             "Need a challenge? Pick our toughest courses.",
-            "Our courses are like puzzles\u00e2\u20ac\u201dfun and rewarding.",
+            "Our courses are like puzzles, fun and rewarding.",
             "Enroll now, thank me later.",
             "The courses here? Life-changing and brain-bending."
         ],
@@ -104,7 +104,7 @@
         ],
         "Casey": [
             "Courses here? A rollercoaster of learning and fun!",
-            "Dive into our courses\u00e2\u20ac\u201dyou won\u00e2\u20ac\u2122t regret it.",
+            "Dive into our courses, you wont regret it.",
             "Sign up for courses and unlock your potential.",
             "Our courses are the secret sauce to success.",
             "Bored? Join our courses and spice up your life!"
@@ -121,7 +121,7 @@
         "Jordan": [
             "The university is in the heart of Poppleton.",
             "Poppleton is a vibrant city full of opportunities.",
-            "Our campus is close to everything you\u00e2\u20ac\u2122ll ever need.",
+            "Our campus is close to everything you will ever need.",
             "It is easy to reach us from the main train station.",
             "Poppleton: small town, big dreams."
         ],
@@ -129,7 +129,7 @@
             "Poppleton is as close to perfection as it gets.",
             "Our campus location? Convenient and beautiful.",
             "Poppleton has everything: life, culture, and coffee.",
-            "Finding us is easy\u00e2\u20ac\u201dstaying away is hard.",
+            "Finding us is easy, staying away is hard.",
             "Poppletons vibes? Unmatched."
         ],
         "Morgan": [
@@ -137,7 +137,7 @@
             "We are proud to be in the heart of Poppleton.",
             "Poppleton is known for its student-friendly atmosphere.",
             "Our scenic campus is just a short walk from downtown.",
-            "We\u00e2\u20ac\u2122re perfectly located for both study and leisure."
+            "We are perfectly located for both study and leisure."
         ],
         "Casey": [
             "Poppleton? More like Popple-fun!",
